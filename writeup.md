@@ -2,16 +2,7 @@
 
 ---
 
-**Build a Traffic Sign Recognition Project**
-
-The goals / steps of this project are the following:
-* Load the data set (see below for links to the project data set)
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
-
+This is the writeup for Traffic Sign Recognition Project from Udacity's Self-Driving Car Nanodegree. The link to the project code is [here](https://github.com/julson/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
 
 [//]: # (Image References)
 
@@ -27,22 +18,12 @@ The goals / steps of this project are the following:
 [image10]: ./images/expanded1.png "Traffic Sign Rotated Left"
 [image11]: ./images/expanded2.png "Traffic Sign Scaled"
 
-## Rubric Points
-### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.
-
----
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/julson/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
-
 ### Data Set Summary & Exploration
 
-#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
+We used the traffic signs from the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset) which was already provided in pickled format.
 
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
+Using the pandas library to calculate summary statistics of the traffic
+signs data set, I got:
 
 * The size of training set is 34799
 * The size of the validation set is 4410
@@ -50,18 +31,14 @@ signs data set:
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-#### 2. Include an exploratory visualization of the dataset.
 
-I plotted the training, validation and tests sets on a histogram to see the distribution of traffic signs across all the 43 classes. The distribution is a bit uneven, so it might be useful
-to generate fake data other classes to balance it out.
+Looking at the training, validation and test sets plotted on a histogram, it shows that the distribution is a bit uneven across th 43 classes, but the sizes are sufficient enough to train the classifier.
 
 ![alt text][image1]
 
-### Design and Test a Model Architecture
+### Creating the Architecture
 
-#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
-
-For pre-processing, I normalized the images to reduce the oscillations when the learning rate gets applied and turn them into grayscale in order to reduce the dimensions of the input (they're going to get reduced as they pass through the network anyway)
+Pre-processing the images is necessary to reduce the variations between images. Converting the images to grayscale reduces the dimensions of the input and takes out color from the equation. The images are then normalized to reduce the oscillations when the learning rate gets applied. It produces training image of something like this:
 
 ![alt text][image2]
 
@@ -69,9 +46,9 @@ I expanded the data set to add 3 more images per sign, with the images rotated 1
 
 ![alt text][image9] ![alt text][image10] ![alt text][image11]
 
+The layers of the neural net were based from the (LeNet Architecture)[http://yann.lecun.com/exdb/lenet/], introduced in 1998 and was mainly used then to perform character recognition. It is also the architecture featured in the nanodegree's lab (which pretty much means that it's the only architecture I know for now). There have been a lot more neural network architectures developed since then, but it's still very relevant given it's simplicity, speed and its success in image classification.
 
-#### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
-
+There weren't a lot of changes to the architecture (if it ain't broke), but adding dropout dramatically improved the prediction results. The table below shows all the layers, outputs and settings used:
 
 | Layer         		|     Description	        					|
 |:---------------------:|:---------------------------------------------:|
@@ -91,48 +68,40 @@ I expanded the data set to add 3 more images per sign, with the images rotated 1
 | Dropout               | keep_prob @ 0.5                               |
 | Fully connected       | outputs 43                                    |
 
+### Training and Results
 
-#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+Not much of the training pipeline was changed from the LeNet Lab code. The classes are one-hot encoded for easier classification (instead of dealing with probabilities) before passing it through TensorFlow's soft_max_cross_entropy_with_logits. The AdamOptimizer was used to minimize the loss for backpropagation, which I think was beneficial given its ability to adjust the learning rates per parameter. The learning rate remained unchanged at 0.001.
 
-Not much of the training pipeline was changed from the LeNet Lab code (if it ain't broke...). The classes are one-hot encoded for easier classification (instead of dealing with probabilities) before passing it through TensorFlow's soft_max_cross_entropy_with_logits. The AdamOptimizer was used to minimize the loss for backpropagation, which I think was beneficial given its ability to adjust the learning rates per parameter.
-
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
-
-My final model results were:
-* validation set accuracy of 95.9%
-* test set accuracy of 94.6%
-
-The LeNet architecture from the lab was chosen as it's the architecture I'm most familiar with. Despite its age (and my laziness), it's still a very relevant architecture due to its speed, simplicity and its ability to classify images (given that it was used for character recognition).
-
-Using just the vanilla architecture taken from the lab code, it produced a validation set accuracy to around ~89%. Dropout was then added between the 3 fully-connected layers to introduce some redundancy, which increased the accuracy to ~93%. Expanding the training set to include some scaled and rotated images finally pushed the final validation accuracy to ~96%.
-
-Given that the test set is a completely new set of images and not a set that the network has 'seen' already, running it through the model and producing 94.6% provides some confidence that the model works (though it could be better).
+Using just the vanilla architecture taken from the lab code, it produced a validation set accuracy to around ~89%. Dropout was then added between the 3 fully-connected layers to introduce some redundancy, which increased the accuracy to ~93%. Expanding the training set to include some scaled and rotated images finally pushed the final validation accuracy to 95.9%.
 
 
-### Test a Model on New Images
+Finally, running the model through the test set yielded a 94.6% accuracy, which is pretty good given that the test set is a completely new set of images and not a set that the network has 'seen' already, proving that the model works.
 
-#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+### Introducing a New Set of Images
 
-Here are five German traffic signs that I found on the web:
+Next was to search 5 new German traffic signs from the web. The new images were picked from another German traffic sign dataset (TestIJCNN2013.zip, with 300 images), which is eerily from the same site where the training dataset was taken from. What I got were images that are in their original size and form, so I had to scale and crop them to 32x32 by hand, which hopefully introduced some variations to the input if that were indeed the case.
 
-![alt text][image4] ![alt text][image5] ![alt text][image6]
-![alt text][image7] ![alt text][image8]
-
-These images were picked from a German traffic sign dataset (TestIJCNN2013.zip, with 300 images) that I've found on the web, which I think might be from the set from what the model was trained on, although the images were in its original size and had to be scaled and cropped to 32x32 by hand, which would hopefully introduce some variation if that were indeed the case.
+![alt text][image4]
 
 The first image is pretty dark and slightly rotated to the left, which I felt like would cause some issues after converting the image to grayscale.
 
+![alt text][image5]
+
 The second image is also rotated to the left. I haven't looked at any of the images in the training set, but I was assuming that everything was all properly centered, so I thought that this would cause some issues.
+
+![alt text][image6]
 
 The third image is pretty straight-forward, although it's slightly aligned to the right, I thought that the CNN's translation invariance would cause no issues with this.
 
+![alt text][image7]
+
 The fourth image is scaled to almost fill the entire image. I thought it would be one of the easiest to classify, but it's the one that had the most difficulty.
 
-The last image would be difficult given that its dark, small and slightly off-center.
+![alt text][image8]
 
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+The last image would be difficult given that it's dark, small and slightly off-center.
 
-Here are the results of the prediction:
+Running these through the model gave me:
 
 | Image			        |     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
@@ -145,11 +114,11 @@ Here are the results of the prediction:
 
 The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%, which I think was pretty accurate given that its constantly only having trouble with the 50 km/h sign, after multiple runs of the notebook.
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+### Results in Detail
 
-The code for making predictions on my final model is located in the bottom of the "Step 4: Test a Model on New Images" section in the Jupyter notebook.
+Digging through the probabilities generated by the model, I gathered the top five results for each image. Here's what I got:
 
-The first "General Caution" image was successfully classified with a 97.629% certainty.
+The first image was a "General Caution" sign, which was successfully classified with a 97.629% certainty.
 
 | Probability         	|     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
