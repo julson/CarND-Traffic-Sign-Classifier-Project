@@ -84,11 +84,11 @@ Next was to search 5 new German traffic signs from the web. The new images were 
 
 | Image         	|     Description	        					|
 |:------------------|:---------------------------------------------:|
-|![alt text][image4]|The first image is pretty dark and slightly rotated to the left, which I felt like would cause some issues after converting the image to grayscale.|
+|![alt text][image4]|This one's is pretty dark and slightly rotated to the left, which I felt like would cause some issues after converting the image to grayscale.|
 |![alt text][image5]|The second image is also rotated to the left. I haven't looked at any of the images in the training set, but I was assuming that everything was all properly centered, so I thought that this would cause some issues.|
-|![alt text][image6]|The third image is pretty straight-forward, although it's slightly aligned to the right, I thought that the CNN's translation invariance would cause no issues with this.|
+|![alt text][image6]|This is pretty straight-forward, although it's slightly aligned to the right, I thought that the CNN's translation invariance would cause no issues with this.|
 |![alt text][image7]|The fourth image is scaled to almost fill the entire image. I thought it would be one of the easiest to classify, but it's the one that had the most difficulty.|
-|![alt text][image8]|The last image would be difficult given that it's dark, small and slightly off-center.|
+|![alt text][image8]|The last one would be difficult given that it's dark, small and slightly off-center.|
 
 Running these through the model gave me:
 
@@ -101,7 +101,7 @@ Running these through the model gave me:
 | Road Narrows Right	| Road Narrows Right      						|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%, which I think was pretty accurate given that its constantly only having trouble with the 50 km/h sign, after multiple runs of the notebook.
+The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%, which I think was pretty accurate given that it's constantly only having trouble with the 50 km/h sign, after multiple runs of the notebook.
 
 ### Results in Detail
 
@@ -156,7 +156,3 @@ Lastly, for the "Road narrows on the right" sign, the model predicted it correct
 | .08229    			| Traffic Signals    	   						|
 | .07036           		| Bicycles Crossing         	 				|
 | .03006	  		    | Wild animals crossing                	   		|
-
-
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
