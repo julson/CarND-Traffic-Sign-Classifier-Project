@@ -32,13 +32,13 @@ signs data set, I got:
 * The number of unique classes/labels in the data set is 43
 
 
-Looking at the training, validation and test sets plotted on a histogram, it shows that the distribution is a bit uneven across th 43 classes, but the sizes are sufficient enough to train the classifier.
+Looking at the training, validation and test sets plotted on a histogram, it shows that the distribution is a bit uneven across the 43 classes, but the sizes are sufficient enough to train the classifier.
 
 ![alt text][image1]
 
 ### Creating the Architecture
 
-Pre-processing the images is necessary to reduce the variations between images. Converting the images to grayscale reduces the dimensions of the input and takes out color from the equation. The images are then normalized to reduce the oscillations when the learning rate gets applied. It produces training image of something like this:
+Preprocessing the images is necessary to reduce the variations between images. Converting the images to grayscale reduces the dimensions of the input and takes out color from the equation. The images are then normalized to reduce the oscillations when the learning rate gets applied. Applying both produces training image of something like this:
 
 ![alt text][image2]
 
@@ -46,9 +46,10 @@ I expanded the data set to add 3 more images per sign, with the images rotated 1
 
 ![alt text][image9] ![alt text][image10] ![alt text][image11]
 
-The layers of the neural net were based from the (LeNet Architecture)[http://yann.lecun.com/exdb/lenet/], introduced in 1998 and was mainly used then to perform character recognition. It is also the architecture featured in the nanodegree's lab (which pretty much means that it's the only architecture I know for now). There have been a lot more neural network architectures developed since then, but it's still very relevant given it's simplicity, speed and its success in image classification.
+The layers of the neural net were based from the [LeNet Architecture](http://yann.lecun.com/exdb/lenet/), introduced in 1998 and was mainly used then to perform character recognition. It is also the architecture featured in the nanodegree's lab (which pretty much means that it's the only architecture I know for now). There have been a lot more neural network architectures developed since then, but it's still very relevant given it's simplicity, speed and its success in image classification.
 
-There weren't a lot of changes to the architecture (if it ain't broke), but adding dropout dramatically improved the prediction results. The table below shows all the layers, outputs and settings used:
+There weren't a lot of changes to the architecture (if it ain't broke...), but adding dropout dramatically improved the prediction results. The table below shows all the layers, outputs and settings used:
+
 
 | Layer         		|     Description	        					|
 |:---------------------:|:---------------------------------------------:|
@@ -81,25 +82,13 @@ Finally, running the model through the test set yielded a 94.6% accuracy, which 
 
 Next was to search 5 new German traffic signs from the web. The new images were picked from another German traffic sign dataset (TestIJCNN2013.zip, with 300 images), which is eerily from the same site where the training dataset was taken from. What I got were images that are in their original size and form, so I had to scale and crop them to 32x32 by hand, which hopefully introduced some variations to the input if that were indeed the case.
 
-![alt text][image4]
-
-The first image is pretty dark and slightly rotated to the left, which I felt like would cause some issues after converting the image to grayscale.
-
-![alt text][image5]
-
-The second image is also rotated to the left. I haven't looked at any of the images in the training set, but I was assuming that everything was all properly centered, so I thought that this would cause some issues.
-
-![alt text][image6]
-
-The third image is pretty straight-forward, although it's slightly aligned to the right, I thought that the CNN's translation invariance would cause no issues with this.
-
-![alt text][image7]
-
-The fourth image is scaled to almost fill the entire image. I thought it would be one of the easiest to classify, but it's the one that had the most difficulty.
-
-![alt text][image8]
-
-The last image would be difficult given that it's dark, small and slightly off-center.
+| Image         	|     Description	        					|
+|:------------------|:---------------------------------------------:|
+|![alt text][image4]|The first image is pretty dark and slightly rotated to the left, which I felt like would cause some issues after converting the image to grayscale.|
+|![alt text][image5]|The second image is also rotated to the left. I haven't looked at any of the images in the training set, but I was assuming that everything was all properly centered, so I thought that this would cause some issues.|
+|![alt text][image6]|The third image is pretty straight-forward, although it's slightly aligned to the right, I thought that the CNN's translation invariance would cause no issues with this.|
+|![alt text][image7]|The fourth image is scaled to almost fill the entire image. I thought it would be one of the easiest to classify, but it's the one that had the most difficulty.|
+|![alt text][image8]|The last image would be difficult given that it's dark, small and slightly off-center.|
 
 Running these through the model gave me:
 
